@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3FI Insurance - Peer to Peer Microinsurance</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>3FI Insurance</h1>
+
+       <h2 id="insured"></h2>
+
+        <label for="address" class="col-lg-2 control-label">Enter your User ID here</label>
+        <input id="address" type="text">
+
+        <button id="button">Get Details</button>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       
+	   if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+			 web3.eth.defaultAccount = $("#address").val();
+
+			 var InsuranceContract = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "claimValue",
+				"type": "uint256"
+			}
+		],
+		"name": "Claim",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "mobileNumber",
+				"type": "uint256"
+			},
+			{
+				"name": "coverageValue",
+				"type": "uint256"
+			}
+		],
+		"name": "insureUser",
+		"outputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "premiumValue",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "coverageValue",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "claimMade",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"name": "mobileNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "LogInsureUser",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "premiumValue",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "coverageValue",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "claimMade",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"name": "mobileNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "LogUpdateInsureUser",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getUser",
+		"outputs": [
+			{
+				"name": "mobileNumber",
+				"type": "uint256"
+			},
+			{
+				"name": "premiumValue",
+				"type": "uint256"
+			},
+			{
+				"name": "coverageValue",
+				"type": "uint256"
+			},
+			{
+				"name": "claimMade",
+				"type": "bool"
+			},
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "getUserAtIndex",
+		"outputs": [
+			{
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getUserCount",
+		"outputs": [
+			{
+				"name": "count",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "insuredAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "isInsured",
+		"outputs": [
+			{
+				"name": "isIndeed",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]);
+
+var V12Insurance = InsuranceContract.at('0x1302218d10a5926be01c4b982c11e3e1301e11c7');
+        console.log(V12Insurance);
+        } 
+		
+        $("#button").click(function() {
+            userAddress =$("#address").val();
+			result = V12Insurance.getUser.call(userAddress).toString();
+			$("#insured").html(result);
+			}
+        );
+    </script> 
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3FI Insurance - Peer to Peer Microinsurance </title>
+
+	<link rel="stylesheet" type="text/css" href="3FImain.css">
+	
+   <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+
+</head>
+<body>
+        
+    <div class="container">
+
+        <h1>3FI Insurance</h1>
+
+        <p> Welcome to 3FI Insurance : India's first blockchain based peer to peer microinsurance platform.</p>
+
+        <h2 id="insured"></h2>
+
+        
+        <label for="uid" class="col-lg-2 control-label">Insured UID</label>
+       
+        <input id="uid" type="text" name="userID">
+       
+      
+        <label for="password" class="col-lg-2 control-label">Password</label>
+        <input id="password" type="password">
+        <button id="button_unlock">Unlock your account</button>
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       
+		   if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+			
+			$("#button_unlock").click(function() {
+            userAddress =$("#uid").val();
+            password =$("#password").val();
+			var flag = web3.personal.unlockAccount(userAddress, password, 1000).toString();
+			if (flag === 'true')
+			{
+                $("#insured").html('Success');
+                var url = "options_page.html?userID="+userAddress;
+                window.location.href = url
+			
+			}
+			else
+			{
+				$("#insured").html('Invalid');
+                
+				}
+        });
+        }
+    </script>
+    </body>
+</html>
